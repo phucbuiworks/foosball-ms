@@ -474,7 +474,7 @@ export default function Dashboard() {
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 bg-red-650 hover:bg-red-700 text-xs sm:text-sm px-2.5 py-1 rounded transition-colors text-white"
+            className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-xs sm:text-sm px-2.5 py-1 rounded transition-colors text-white"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>
@@ -818,7 +818,7 @@ export default function Dashboard() {
 
                                 {/* Away Team (Red / Đỏ) */}
                                 <div className="flex items-center gap-2">
-                                  <span className="h-3 w-3 rounded-full bg-red-650 inline-block shrink-0 shadow-sm" title="Away (Red)" />
+                                  <span className="h-3 w-3 rounded-full bg-red-600 inline-block shrink-0 shadow-sm" title="Away (Red)" />
                                   <span className={`font-semibold text-sm truncate ${m.played && m.away_score === 5 ? 'text-indigo-900 font-extrabold' : 'text-gray-700'}`}>
                                     {m.away_team_name}
                                   </span>
@@ -1070,7 +1070,7 @@ export default function Dashboard() {
                 {/* Away Team Score (Red) */}
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="h-3.5 w-3.5 rounded-full bg-red-650 inline-block shrink-0 shadow-sm" />
+                    <span className="h-3.5 w-3.5 rounded-full bg-red-600 inline-block shrink-0 shadow-sm" />
                     <span className="font-bold text-sm text-gray-800 truncate">{scoreModalMatch.away_team_name}</span>
                   </div>
                   <input
