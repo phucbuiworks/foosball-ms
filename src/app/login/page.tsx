@@ -42,8 +42,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-55 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight text-gray-900">
-            Foosball Tracker
+          <img
+            src="/DH_Foosball_Club.png"
+            alt="DH Foosball Club Logo"
+            className="mx-auto h-20 w-20 object-contain rounded-full border border-gray-100 shadow-sm"
+          />
+          <h2 className="mt-4 text-center text-3xl font-extrabold tracking-tight text-gray-900">
+            Foosball MS
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Sign in to manage your internal tournaments

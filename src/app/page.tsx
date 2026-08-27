@@ -457,7 +457,11 @@ export default function Dashboard() {
       {/* Navbar Header */}
       <header className="sticky top-0 bg-indigo-900 text-white shadow-md z-40 px-4 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => { setActiveId(null); setTournamentDetails(null); }}>
-          <Trophy className="h-6 w-6 text-yellow-400" />
+          <img
+            src="/DH_Foosball_Club.png"
+            alt="DH Foosball Club Logo"
+            className="h-8 w-8 object-contain rounded-full bg-white p-0.5 border border-indigo-200 shadow-sm"
+          />
           <h1 className="font-bold text-lg sm:text-xl tracking-tight">Foosball MS</h1>
         </div>
         <div className="flex items-center gap-3">
