@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Foosball Tournament Tracker
 
-## Getting Started
+A mobile-first responsive full-stack web application designed to track internal foosball tournaments, manage participants, pair teams randomly with seed restrictions, generate double round-robin schedules, log match results, and calculate real-time leaderboards.
 
-First, run the development server:
+Built with **Next.js 16.3 (App Router)**, **React 19**, **Tailwind CSS v4**, and **Supabase Postgres**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Key Features
+
+1. **Authentication Module**
+   - Direct password hash registration and sign-in.
+   - Session management via Edge-compatible secure HTTP-only cookies and JWT tokens.
+   - Default administrator account seeded: `admin` / `admin123`.
+
+2. **Tournament Setup Module**
+   - Create new tournaments with custom names.
+   - Dynamic player entry list with "Seed" checkbox.
+   - Strong validation engine:
+     - Player count must be even and $\ge 6$.
+     - Number of seeds must not exceed the number of generated teams (player count / 2).
+
+3. **Core Generation Engine**
+   - **Team Randomization:** Pairs players into teams of 2. Splices and spreads seed players evenly across teams to prevent them from teaming up together.
+   - **Fixture Generator:** Creates a Double Round-Robin schedule using the **Circle Method** (mirroring matches for Leg 1 and Leg 2).
+   - **Side Assigner:** Assigns hardcoded home (White) and away (Red) tags to teams. Leg 2 matches swap home/away roles.
+
+4. **Tournament Dashboard UI**
+   - Tab-based workspace:
+     - **Leaderboard:** Dynamic table calculating Played (P), Wins (W), Losses (L), Goals For (GF), Goals Against (GA), Goal Difference (GD), and Points (3 for Win, 0 for Loss). Auto-sorted by Points $\rightarrow$ GD $\rightarrow$ GF.
+     - **Matches List:** Real-time matches overview sorted by Round. Contains tab filters (All, Pending, or specific Round) and White vs Red side indicators for positioning.
+     - **Teams View:** Grid layout showing generated team names and their players.
+   - **Score Entry Validator:** Click on a pending match to input scores. Validates that exactly one team scores exactly `5` goals, and the other team scores `< 5` goals.
+   - **Auto-Sync / Real-Time Polling:** Polling engine that fetches the latest data every 8 seconds, ensuring all devices around the table see the latest standings and live scores.
+
+---
+
+## 🛠️ Database Schema
+
+The application uses Supabase Postgres database. Here is the relational schema:
+
+```mermaid
+erDiagram
+    users {
+        int id PK
+        varchar username UK
+        varchar password_hash
+        timestamp created_at
+    }
+    tournaments {
+        int id PK
+        varchar name
+        varchar status
+        timestamp created_at
+    }
+    players {
+        int id PK
+        int tournament_id FK
+        varchar name
+        boolean is_seed
+        timestamp created_at
+    }
+    teams {
+        int id PK
+        int tournament_id FK
+        varchar name
+        int player1_id FK
+        int player2_id FK
+        timestamp created_at
+    }
+    matches {
+        int id PK
+        int tournament_id FK
+        int round
+        int home_team_id FK
+        int away_team_id FK
+        int home_score
+        int away_score
+        boolean played
+        timestamp created_at
+    }
+
+    tournaments ||--o{ players : "has"
+    tournaments ||--o{ teams : "has"
+    tournaments ||--o{ matches : "has"
+    players ||--o{ teams : "player 1"
+    players ||--o{ teams : "player 2"
+    teams ||--o{ matches : "plays as home"
+    teams ||--o{ matches : "plays as away"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💻 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Prerequisites
+Ensure you have `Node.js (v18+)` and `npm` installed.
 
-## Learn More
+### 2. Environment Variables
+The application parameters are configured in `.env.local` at the root of the project:
+```env
+DATABASE_URL=postgresql://postgres.rbxnkfzsethxbopxxihu:Cahoihoang%402013@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+JWT_SECRET=super-secret-key-for-foosball-tournament-tracker-2026
+```
+*(An active Supabase database pooler is configured by default).*
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Initialize Database
+Run the database schema setup and seed the default user account:
+```bash
+node scripts/db-init.js
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) on your desktop or mobile device.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. Build for Production
+To generate a production-ready optimized build:
+```bash
+npm run build
+npm start
+```

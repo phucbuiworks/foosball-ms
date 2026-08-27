@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: foosball-tournament-tracker
+    runtime: node
+    buildCommand: npm run build
+    startCommand: npm start
+    region: singapore
+    envVars:
+      - key: DATABASE_URL
+        sync: false # User will provide this on the Render dashboard
+      - key: JWT_SECRET
+        generateValue: true # Render will automatically generate a secure key
